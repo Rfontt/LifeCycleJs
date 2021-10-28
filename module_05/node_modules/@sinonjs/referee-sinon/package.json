@@ -1,0 +1,60 @@
+{
+  "name": "@sinonjs/referee-sinon",
+  "version": "10.1.0",
+  "description": "Sinon.JS assertions for referee",
+  "homepage": "https://github.com/sinonjs/referee-sinon",
+  "author": "Christian Johansen",
+  "license": "BSD-3-Clause",
+  "main": "./lib/referee-sinon",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sinonjs/referee-sinon"
+  },
+  "scripts": {
+    "build": "npm run build:dist-folder && npm run build:bundle",
+    "build:bundle": "esbuild lib/referee-sinon.js --bundle --outfile=dist/referee-sinon.js",
+    "build:dist-folder": "mkdirp dist",
+    "lint": "eslint .",
+    "precommit": "lint-staged",
+    "prepublishOnly": "npm run build && mkdocs gh-deploy -r upstream || mkdocs gh-deploy -r origin",
+    "test": "mocha 'lib/**/*.test.js'",
+    "test-check-coverage": "npm run test-coverage && nyc check-coverage --branches 100 --functions 100 --lines 100",
+    "test-cloud": "npm run test-headless -- --wd",
+    "test-coverage": "nyc --reporter text --reporter html --reporter lcovonly npm run test",
+    "test-headless": "mochify --recursive -R dot \"./lib/*.test.js\"",
+    "prettier:check": "prettier --check '**/*.{js,css,md}'",
+    "prettier:write": "prettier --write '**/*.{js,css,md}'",
+    "preversion": "npm run test-check-coverage",
+    "version": "changes --commits --footer",
+    "postversion": "git push --follow-tags && npm publish"
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --check",
+    "*.js": "eslint"
+  },
+  "files": [
+    "dist/",
+    "docs/",
+    "lib/",
+    "!lib/**/*.test.js"
+  ],
+  "devDependencies": {
+    "@sinonjs/eslint-config": "^4.0.3",
+    "@studio/changes": "^2.2.0",
+    "esbuild": "^0.8.31",
+    "husky": "^4.2.1",
+    "lint-staged": "^10.0.7",
+    "mkdirp": "^1.0.3",
+    "mocha": "^8.4.0",
+    "mochify": "^8.0.0",
+    "nyc": "^15.0.0",
+    "prettier": "^2.1.2",
+    "rollup-plugin-commonjs": "^10.1.0"
+  },
+  "dependencies": {
+    "@sinonjs/commons": "^1.8.3",
+    "@sinonjs/referee": "^9.1.0",
+    "sinon": "^11.1.1",
+    "util": "^0.12.3"
+  }
+}
